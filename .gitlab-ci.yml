@@ -1,12 +1,12 @@
 image: python:3.11
 
-services:
-  - docker:20.10.7-dind  # Docker-in-Docker service
-
 stages:
   - build
   - test
   - dockerise
+
+services:
+  - docker:latest  # Use Docker service for the build
 
 cache:
   paths:
@@ -14,33 +14,29 @@ cache:
     - .cache/pip/
 
 before_script:
-  # Create and activate virtual environment
   - python3 -m venv venv
   - source venv/bin/activate
-  # Install Docker CLI if needed for DinD
-  - apt-get update && apt-get install -y docker.io
 
 build:
   stage: build
   script:
-    # Install dependencies
     - pip install --upgrade pip
     - pip install -r requirements.txt
 
 test:
   stage: test
   script:
-    # Activate virtual environment in the test stage
     - source venv/bin/activate
-    # Run tests without database (adjust tests to not require DB access)
     - python manage.py test --exclude-tag=db
 
 dockerise:
   stage: dockerise
   script:
-    # Build the Docker image
     - docker build -t oussematrimech/employeeapp:latest .
-    # Push the image to Docker Hub
+  only:
+    - main
 
-
-
+# Docker socket mount
+docker:
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
