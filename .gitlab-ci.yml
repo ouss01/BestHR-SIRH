@@ -1,49 +1,28 @@
-image: python:3.11
-
-services:
-  - docker:20.10.7-dind  # Docker-in-Docker service
 
 stages:
   - build
-  - test
-  - dockerise
+  - push
 
-cache:
-  paths:
-    - venv/
-    - .cache/pip/
+variables:
+  DOCKER_DRIVER: overlay2
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 
-before_script:
-  # Create and activate virtual environment
-  - python3 -m venv venv
-  - source venv/bin/activate
-  # Install Docker CLI if needed for DinD
-  - apt-get update && apt-get install -y docker.io
-  - sudo groupadd docker
-  - sudo usermod -aG docker $USER
-  - newgrp docker
-
-build:
+build_image:
   stage: build
+  image: docker:latest
+  services:
+    - docker:dind
   script:
-    # Install dependencies
-    - pip install --upgrade pip
-    - pip install -r requirements.txt
-  when: manual
-test:
-  stage: test
+    - docker build -t $IMAGE_TAG .
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - docker tag $IMAGE_TAG $CI_REGISTRY_IMAGE:latest
+
+push_image:
+  stage: push
+  image: docker:latest
+  services:
+    - docker:dind
   script:
-    # Activate virtual environment in the test stage
-    - source venv/bin/activate
-    # Run tests without database (adjust tests to not require DB access)
-    - python manage.py test --exclude-tag=db
-  when: manual
-dockerise:
-  stage: dockerise
-  script:
-    # Build the Docker image
-    - docker build -t oussematrimech/employeeapp:latest .
-    # Push the image to Docker Hub
-
-
-
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - docker push $IMAGE_TAG
+    - docker push $CI_REGISTRY_IMAGE:latest
