@@ -4,6 +4,7 @@ from EmployeeApp.models import Department, Employee
 
 class DepartmentAPITests(APITestCase):
     def setUp(self):
+        # Ensure Department model has a 'name' field.
         self.department = Department.objects.create(name="HR")
         self.department_url = '/api/departments/'  # Assuming DRF routers or a similar URL pattern.
 
@@ -17,6 +18,7 @@ class DepartmentAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_post_invalid_department(self):
+        # Invalid department name (empty string).
         data = {"name": ""}
         response = self.client.post(self.department_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -35,6 +37,7 @@ class DepartmentAPITests(APITestCase):
 
 class EmployeeAPITests(APITestCase):
     def setUp(self):
+        # Ensure Employee model has a 'name' field and ForeignKey to Department.
         self.department = Department.objects.create(name="HR")
         self.employee = Employee.objects.create(name="John Doe", department=self.department)
         self.employee_url = '/api/employees/'  # Assuming DRF routers or a similar URL pattern.
