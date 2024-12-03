@@ -6,7 +6,7 @@ stages:
 install:
   stage: install
   script:
-    - python -m venv venv  # Create virtual environment
+    - py -m venv venv  # Create virtual environment
     - source venv/bin/activate  # Activate virtual environment
     - pip install -r requirements.txt  # Install dependencies
 
