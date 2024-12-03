@@ -1,13 +1,32 @@
-
 stages:
   - build
+  - test
+  - dockerise
 
 variables:
   DOCKER_DRIVER: overlay2
   CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:latest
 
-build_image:
+build:
   stage: build
+  script:
+    # Install dependencies
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+    # Create virtual environment (if not already done)
+    - python -m venv venv
+    - source venv/bin/activate
+
+test:
+  stage: test
+  script:
+    # Activate virtual environment
+    - source venv/bin/activate
+    # Run tests without database (adjust tests to not require DB access)
+    - python manage.py test --exclude-tag=db
+
+build_image:
+  stage: dockerise
   image: docker:latest
   services:
     - docker:dind
