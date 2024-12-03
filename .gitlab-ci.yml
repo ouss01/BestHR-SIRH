@@ -1,7 +1,8 @@
 image: python:3.11
 
 services:
-  - name: docker:20.10.7-dind  # Docker-in-Docker service for building images
+  - name: docker:20.10.7-dind
+
 
 stages:
   - build
@@ -14,7 +15,6 @@ cache:
     - .cache/pip/
 
 before_script:
-  # Set up virtual environment
   - python3 -m venv venv
   - source venv/bin/activate
 
@@ -23,24 +23,19 @@ build:
   script:
     - pip install --upgrade pip
     - pip install -r requirements.txt
+  when: manual  # This ensures the build job is only triggered manually
 
 test:
   stage: test
   script:
     - source venv/bin/activate
     - python manage.py test --exclude-tag=db
+  when: manual  # This ensures the test job is only triggered manually
 
 dockerise:
   stage: dockerise
   script:
-    # Ensure Docker is running properly and build the image
-    - docker info  # Verify Docker connectivity
     - docker build -t oussematrimech/employeeapp:latest .
   only:
     - main
-
-# Ensure Docker is able to run
-variables:
-  DOCKER_TLS_CERTDIR: "/certs"
-  DOCKER_HOST: "tcp://docker:2376"
-  DOCKER_DRIVER: "overlay2"
+  when: on_success  # Runs when the pipeline reaches the dockerise stage
