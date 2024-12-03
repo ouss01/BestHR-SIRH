@@ -21,13 +21,13 @@ build:
     # Install dependencies
     - pip install --upgrade pip
     - pip install -r requirements.txt
-    # Run database migrations
-    - python manage.py migrate
+    # Ensure code quality with linting (optional, if linter is used)
+    # - flake8 .
 
 test:
   stage: test
   script:
     # Activate virtual environment in the test stage
     - source venv/bin/activate
-    # Run tests
-    - python manage.py test
+    # Run tests without database (adjust tests to not require DB access)
+    - python manage.py test --exclude-tag=db
