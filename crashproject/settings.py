@@ -60,10 +60,15 @@ WSGI_APPLICATION = 'crashproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'employeeapp_db',  # The database you just created
+        'USER': 'oussema',  # The PostgreSQL username you created
+        'PASSWORD': 'ouss1234',  # The password for the PostgreSQL user
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
