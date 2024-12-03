@@ -3,30 +3,20 @@ stages:
   - test
   - deploy
 
-# Install dependencies and setup environment
 install:
   stage: install
   script:
-    - python -m venv venv  # Create a virtual environment
-    - source venv/bin/activate  # Activate the virtual environment
+    - python -m venv venv  # Create virtual environment
+    - source venv/bin/activate  # Activate virtual environment
     - pip install -r requirements.txt  # Install dependencies
-  only:
-    - main  # Run this on the 'main' branch
 
-# Run tests
 test:
   stage: test
   script:
-    - source venv/bin/activate  # Activate the virtual environment
-    - python manage.py test  # Run your Django tests
-  only:
-    - main  # Run this on the 'main' branch
+    - source venv/bin/activate  # Activate virtual environment
+    - python manage.py test  # Run tests
 
-# Deploy (customize for your deployment process)
 deploy:
   stage: deploy
   script:
-    - echo "Deploying to production"  # Replace with actual deployment commands
-    # Example for Heroku or a server deploy could go here
-  only:
-    - main  # Run this on the 'main' branch
+    - echo "Deploying to production"
