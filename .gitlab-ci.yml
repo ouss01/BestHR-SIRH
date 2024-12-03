@@ -4,6 +4,16 @@ stages:
   - build
   - test
   - dockerise
+cache:
+  paths:
+    - venv/
+    - .cache/pip/
+
+before_script:
+  # Create and activate virtual environment
+  - python3 -m venv venv
+  - source venv/bin/activate
+  # Install Docker CLI if needed for DinD
 
 variables:
   DOCKER_DRIVER: overlay2
@@ -35,3 +45,4 @@ build_image:
     - docker build -t $CONTAINER_TEST_IMAGE .
     - docker push $CONTAINER_TEST_IMAGE
     - docker logout
+
