@@ -353,3 +353,77 @@ class Promotion(models.Model):
         return f"Promotion of {self.employe_promotionne.firstName} {self.employe_promotionne.lastName} from {self.designation_avant} to {self.designation_apres} on {self.date_promotion}"
 
 
+from django.db import models
+
+
+class Handicap(models.Model):
+    departement = models.ForeignKey('Department', on_delete=models.CASCADE, related_name='handicaps')
+    employee = models.ForeignKey('Employee', on_delete=models.CASCADE, related_name='handicaps')
+    handicap_type = models.CharField(max_length=100)
+    amenagement_type = models.CharField(max_length=255)
+    amenagement_state = models.CharField(max_length=50, choices=[
+        ('Actif', 'Actif'),
+        ('Inactif', 'Inactif'),
+    ])
+    evaluation_date = models.DateField()
+
+    def __str__(self):
+        return f"{self.employee} - {self.handicap_type}"
+
+from django.db import models
+
+class FinActivity(models.Model):
+    TYPE_CONTRACT_CHOICES = [
+        ('CDI', 'Contrat à Durée Indéterminée'),
+        ('CDD', 'Contrat à Durée Déterminée'),
+        ('Stage', 'Stage'),
+        ('Freelance', 'Freelance'),
+    ]
+
+    departement = models.ForeignKey('Department', on_delete=models.CASCADE, related_name='finactivities')
+    employee = models.ForeignKey('Employee', on_delete=models.CASCADE, related_name='finactivities')
+    date_fin = models.DateField()
+    type_contrat = models.CharField(max_length=50, choices=TYPE_CONTRACT_CHOICES)
+    raison_fin = models.TextField()
+
+    def __str__(self):
+        return f"{self.employee} - {self.department}"
+
+
+
+from django.db import models
+
+class OnboardingProcess(models.Model):
+    # Step 1
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    email = models.EmailField()
+    country = models.CharField(max_length=255)
+    language = models.CharField(max_length=255)
+    contract_type = models.CharField(max_length=255, blank=True, null=True)
+    file = models.FileField(upload_to='uploads/', blank=True, null=True)
+
+    # Step 2
+    username = models.CharField(max_length=255, blank=True, null=True)
+    poste = models.CharField(max_length=255, blank=True, null=True)
+    societe = models.CharField(max_length=255, blank=True, null=True)
+    about = models.TextField(blank=True, null=True)
+
+    # Step 3
+    account_activated = models.CharField(max_length=50)
+    remote_work = models.BooleanField(default=False)
+    on_site_work = models.BooleanField(default=False)
+    work_hours = models.CharField(max_length=255)
+    document_submission = models.CharField(max_length=255)
+    id_card_application = models.BooleanField(default=False)
+    motorized_parking = models.BooleanField(default=False)
+    emergency_contact = models.CharField(max_length=255)
+
+    # Feedback
+    onboarding_rating = models.IntegerField()
+    positive_feedback = models.TextField(blank=True, null=True)
+    improvements_feedback = models.TextField(blank=True, null=True)
+    advice_feedback = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"

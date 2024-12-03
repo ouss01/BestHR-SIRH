@@ -42,6 +42,9 @@ urlpatterns = [
          name='etapeonboarding-list-for-onboarding'),
     path('etape-onboarding-list/<int:onboarding_id>/', etape_onboarding_list_api),
 
+    path('onboarding/', views.onboarding_list_create, name='onboarding-list-create'),
+    path('onboarding/<int:pk>/', views.onboarding_detail, name='onboarding-detail'),
+
     # Competence URL
     path('competences/', competence_api, name='competence-api'),
     path('employees/<int:employee_id>/competences/<int:competence_id>/', assign_competence_to_employee,
@@ -86,7 +89,13 @@ urlpatterns = [
     path('promotions/', promotion_list_create, name='promotion-list-create'),
 
     # Class-based views
+    #handicap URL
+    path('handicaps/', views.handicap_list_create, name='handicap-list-create'),
 
+
+    #FINACTIVITY
+    path('finactivities/', views.finactivity_list_create, name='finactivity-list-create'),
+    path('finactivities/<int:pk>/', views.finactivity_detail, name='finactivity-detail'),
 
 
 ]

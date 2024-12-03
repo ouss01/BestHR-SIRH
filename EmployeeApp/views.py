@@ -831,4 +831,129 @@ def promotion_list_create(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Handicap
+from .serializers import HandicapSerializer
+
+@api_view(['GET', 'POST'])
+def handicap_list_create(request):
+    """
+    List all handicaps or create a new handicap.
+    """
+    if request.method == 'GET':
+        handicaps = Handicap.objects.all()
+        serializer = HandicapSerializer(handicaps, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = HandicapSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import FinActivity
+from .serializers import FinActivitySerializer
+
+@api_view(['GET', 'POST'])
+def finactivity_list_create(request):
+    """
+    List all FinActivity records or create a new one.
+    """
+    if request.method == 'GET':
+        activities = FinActivity.objects.all()
+        serializer = FinActivitySerializer(activities, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = FinActivitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def finactivity_detail(request, pk):
+    """
+    Retrieve, update, or delete a FinActivity record.
+    """
+    try:
+        activity = FinActivity.objects.get(pk=pk)
+    except FinActivity.DoesNotExist:
+        return Response({"error": "FinActivity not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = FinActivitySerializer(activity)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = FinActivitySerializer(activity, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        activity.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import OnboardingProcess
+from .serializers import OnboardingProcessSerializer
+
+@api_view(['GET', 'POST'])
+def onboarding_list_create(request):
+    """
+    List all onboarding records or create a new one.
+    """
+    if request.method == 'GET':
+        onboardings = OnboardingProcess.objects.all()
+        serializer = OnboardingProcessSerializer(onboardings, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = OnboardingProcessSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def onboarding_detail(request, pk):
+    """
+    Retrieve, update, or delete an onboarding record.
+    """
+    try:
+        onboarding = OnboardingProcess.objects.get(pk=pk)
+    except OnboardingProcess.DoesNotExist:
+        return Response({"error": "OnboardingProcess not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = OnboardingProcessSerializer(onboarding)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = OnboardingProcessSerializer(onboarding, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        onboarding.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
 

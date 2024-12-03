@@ -180,3 +180,29 @@ class PromotionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Promotion
         fields = ['id', 'departement', 'employe_promotionne', 'date_promotion', 'designation_avant', 'designation_apres']
+
+
+from rest_framework import serializers
+from .models import Handicap
+
+
+class HandicapSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Handicap
+        fields = '__all__'
+
+from .models import FinActivity
+
+class FinActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FinActivity
+        fields = '__all__'
+
+
+from rest_framework import serializers
+from .models import OnboardingProcess
+
+class OnboardingProcessSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OnboardingProcess
+        fields = '__all__'
