@@ -1,10 +1,13 @@
 image: python:3.11
 
+services:
+  - docker:19.03.12-dind  # Docker-in-Docker service
+
 stages:
   - build
   - test
   - dockerise
-# Cache to persist dependencies and venv
+
 cache:
   paths:
     - venv/
@@ -21,17 +24,16 @@ build:
     # Install dependencies
     - pip install --upgrade pip
     - pip install -r requirements.txt
-    # Ensure code quality with linting (optional, if linter is used)
-    # - flake8 .
 
 test:
   stage: test
   script:
-    # Activate virtual environment in the test stage
     - source venv/bin/activate
-    # Run tests without database (adjust tests to not require DB access)
     - python manage.py test --exclude-tag=db
+
 dockerise:
   stage: dockerise
   script:
     - docker build -t oussematrimech/employeeapp:latest .
+  only:
+    - main
