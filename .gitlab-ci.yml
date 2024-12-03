@@ -4,17 +4,30 @@ stages:
   - build
   - test
 
+# Cache to persist dependencies and venv
+cache:
+  paths:
+    - venv/
+    - .cache/pip/
+
 before_script:
-  - python -m venv venv
+  # Create and activate virtual environment
+  - python3 -m venv venv
   - source venv/bin/activate
-  - pip install -r requirements.txt
 
 build:
   stage: build
   script:
+    # Install dependencies
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+    # Run database migrations
     - python manage.py migrate
 
 test:
   stage: test
   script:
+    # Activate virtual environment in the test stage
+    - source venv/bin/activate
+    # Run tests
     - python manage.py test
