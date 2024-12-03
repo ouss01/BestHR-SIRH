@@ -19,6 +19,7 @@ before_script:
   - source venv/bin/activate
   # Install Docker CLI if needed for DinD
   - apt-get update && apt-get install -y docker.io
+  - chmod 666 /var/run/docker.sock
 
 build:
   stage: build
