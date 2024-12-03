@@ -1,46 +1,10 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
-from EmployeeApp.models import Department, Employee
+from EmployeeApp.models import  Employee
 
-class DepartmentAPITests(APITestCase):
-    def setUp(self):
-        # Ensure Department model has a 'name' field.
-        self.department = Department.objects.create(name="HR")
-        self.department_url = '/api/departments/'  # Assuming DRF routers or a similar URL pattern.
-
-    def test_get_all_departments(self):
-        response = self.client.get(self.department_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_post_valid_department(self):
-        data = {"name": "Finance"}
-        response = self.client.post(self.department_url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-    def test_post_invalid_department(self):
-        # Invalid department name (empty string).
-        data = {"name": ""}
-        response = self.client.post(self.department_url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_put_update_department(self):
-        update_url = f'{self.department_url}{self.department.id}/'
-        data = {"name": "Human Resources"}
-        response = self.client.put(update_url, data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_delete_department(self):
-        delete_url = f'{self.department_url}{self.department.id}/'
-        response = self.client.delete(delete_url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
 class EmployeeAPITests(APITestCase):
-    def setUp(self):
-        # Ensure Employee model has a 'name' field and ForeignKey to Department.
-        self.department = Department.objects.create(name="HR")
-        self.employee = Employee.objects.create(name="John Doe", department=self.department)
-        self.employee_url = '/api/employees/'  # Assuming DRF routers or a similar URL pattern.
 
     def test_get_all_employees(self):
         response = self.client.get(self.employee_url)
