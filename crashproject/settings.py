@@ -106,3 +106,12 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Set unique related_name for groups and user_permissions
 # settings.py
 AUTH_USER_MODEL = 'EmployeeApp.CustomUser'
+
+import sys
+
+# Testing settings (for running unit tests)
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db_test.sqlite3',  # Use a separate test database
+    }

@@ -129,3 +129,13 @@ AUTH_USER_MODEL = 'EmployeeApp.CustomUser'
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
+
+
+import sys
+
+# Testing settings (for running unit tests)
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db_test.sqlite3',  # Use a separate test database
+    }
