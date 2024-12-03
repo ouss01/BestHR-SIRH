@@ -1,22 +1,20 @@
-stages:
-  - install
-  - test
-  - deploy
+image: python:3.11
 
-install:
-  stage: install
+stages:
+  - build
+  - test
+
+before_script:
+  - python -m venv venv
+  - source venv/bin/activate
+  - pip install -r requirements.txt
+
+build:
+  stage: build
   script:
-    - py -m venv venv  # Create virtual environment
-    - source venv/bin/activate  # Activate virtual environment
-    - pip install -r requirements.txt  # Install dependencies
+    - python manage.py migrate
 
 test:
   stage: test
   script:
-    - source venv/bin/activate  # Activate virtual environment
-    - python manage.py test  # Run tests
-
-deploy:
-  stage: deploy
-  script:
-    - echo "Deploying to production"
+    - python manage.py test
