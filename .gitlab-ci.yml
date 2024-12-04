@@ -9,11 +9,6 @@ cache:
     - venv/
     - .cache/pip/
 
-before_script:
-  # Create and activate virtual environment
-  - python3 -m venv venv
-  - source venv/bin/activate
-  # Install Docker CLI if needed for DinD
 
 variables:
   DOCKER_DRIVER: overlay2
@@ -22,6 +17,8 @@ variables:
 build:
   stage: build
   script:
+    - python3 -m venv venv
+    - source venv/bin/activate
     # Install dependencies
     - pip install --upgrade pip
     - pip install -r requirements.txt
@@ -29,6 +26,7 @@ build:
 test:
   stage: test
   script:
+    - python3 -m venv venv
     # Activate virtual environment in the test stage
     - source venv/bin/activate
     # Run tests without database (adjust tests to not require DB access)
