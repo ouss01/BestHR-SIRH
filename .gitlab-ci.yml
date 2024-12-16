@@ -10,7 +10,6 @@ cache:
     - venv/
     - .cache/pip/
 
-
 variables:
   DOCKER_DRIVER: overlay2
   CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:latest
